@@ -31,6 +31,12 @@ public class CafeKiosk {
         }
     }
 
+    public int calculateTotalPrice() {
+        return beverages.stream()
+                .mapToInt(Beverage::getPrice)
+                .sum();
+    }
+
     public void remove(Beverage beverage) {
         beverages.remove(beverage);
     }
@@ -39,14 +45,9 @@ public class CafeKiosk {
         beverages.clear();
     }
 
-    public int calculateTotalPrice() {
-        int totalPrice = 0;
-        for (Beverage beverage : beverages) {
-            totalPrice += beverage.getPrice();
-        }
-        return totalPrice;
-    }
-
+    /**
+     * 테스트하기 어려운 프로덕션 코드
+     */
     public Order createOrder() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalTime currentTime = currentDateTime.toLocalTime();
