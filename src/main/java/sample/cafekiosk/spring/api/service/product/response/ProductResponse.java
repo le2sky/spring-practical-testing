@@ -16,6 +16,16 @@ public class ProductResponse {
     private String name;
     private int price;
 
+    @Builder
+    private ProductResponse(Long id, String productNumber, ProductType type, ProductSellingStatus sellingStatus, String name, int price) {
+        this.id = id;
+        this.productNumber = productNumber;
+        this.type = type;
+        this.sellingStatus = sellingStatus;
+        this.name = name;
+        this.price = price;
+    }
+
     public static ProductResponse of(Product product) {
         return ProductResponse.builder()
                 .id(product.getId())
@@ -25,15 +35,5 @@ public class ProductResponse {
                 .name(product.getName())
                 .price(product.getPrice())
                 .build();
-    }
-
-    @Builder
-    private ProductResponse(Long id, String productNumber, ProductType type, ProductSellingStatus sellingStatus, String name, int price) {
-        this.id = id;
-        this.productNumber = productNumber;
-        this.type = type;
-        this.sellingStatus = sellingStatus;
-        this.name = name;
-        this.price = price;
     }
 }
