@@ -1,7 +1,12 @@
 package sample.cafekiosk.spring.domain.stock;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
+
+import java.util.Collection;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -47,5 +52,48 @@ class StockTest {
         assertThatThrownBy(() -> stock.deductQuantity(quantity))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("차감할 재고 수량이 없습니다.");
+    }
+
+    @DisplayName("다이나믹 테스트 샘플")
+    @TestFactory
+    Collection<DynamicTest> dynamicTest() {
+        return List.of(
+                DynamicTest.dynamicTest("샘플 테스트 1", () -> {
+
+                }),
+                DynamicTest.dynamicTest("샘플 테스트 2", () -> {
+
+                })
+        );
+    }
+
+    @DisplayName("재고 차감 시나리오")
+    @TestFactory
+    Collection<DynamicTest> stockDeductionDynamicTest() {
+        // 환경을 공유하면서 시나리오를 검증하기 위해서 다이나믹 테스트를 사용 가능(가독성 향상 가능)
+        // given
+        Stock stock = Stock.create("001", 1);
+
+        return List.of(
+                DynamicTest.dynamicTest("재고를 주어진 개수만큼 차감할 수 있다.", () -> {
+                    // given
+                    int quantity = 1;
+
+                    // when
+                    stock.deductQuantity(quantity);
+
+                    // then
+                    assertThat(stock.getQuantity()).isZero();
+                }),
+                DynamicTest.dynamicTest("재고보다 많은 수의 수량으로 차감 시도하는 경우 예외가 발생한다.", () -> {
+                    // given
+                    int quantity = 2;
+
+                    // when, then
+                    assertThatThrownBy(() -> stock.deductQuantity(quantity))
+                            .isInstanceOf(IllegalArgumentException.class)
+                            .hasMessage("차감할 재고 수량이 없습니다.");
+                })
+        );
     }
 }
